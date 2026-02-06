@@ -1,6 +1,6 @@
 BSD Zero Clause License
 
-Copyright (c) <YOUR USERNAME OR ORGANISATION NAME OR FULL NAME>
+Copyright (c) vinivosh @ 36175157+vinivosh@users.noreply.github.com
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
 
