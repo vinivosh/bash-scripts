@@ -3,7 +3,8 @@
 # ? ############################################################################
 # A simple script to control media playback. Will always control foobar2000 with
 # wine if it is running. Otherwise, it will fallback to using playerctl to
-# control any media players that support it.
+# control any media players that support it. Very useful for use with KDE Plasma
+# 6's keyboard shortcuts setup
 #
 # Usage: ./control-media.sh [--play | --pause | --next | --previous | --stop]
 # ? ############################################################################
@@ -47,8 +48,8 @@ case "$1" in
         ;;
 esac
 
-# Execute the command if foobar2000 is running
-if pgrep -i "foobar2000\.exe" > /dev/null 2>&1; then
+# Execute the command if foobar2000 is installed and running
+if [[ -x "$FOOBAR_PATH" ]] && pgrep -i "foobar2000\.exe" > /dev/null 2>&1; then
     wine "$FOOBAR_PATH" "$COMMAND"
 else
     # Fallback to playerctl if foobar2000 isn't running, in case there is any
