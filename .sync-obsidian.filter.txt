@@ -1,0 +1,5 @@
+# Filtering file for the sync-obsidian.sh script. Files below are included
++ Preferences
++ Custom\ Dictionary.txt*
+# Excluding everything else
+- *
