@@ -44,7 +44,7 @@ rclone bisync \
     --filter-from "$FILTER_FILEPATH" \
     --resilient --recover \
     --max-lock 2m -MvP --fix-case \
-    "${RCLONE_EXTRA_ARGS[@]}" || exit 1
+    "${RCLONE_EXTRA_ARGS[@]}" --force || exit 1
 
 
 printf "\nObsidian vaults synced successfully.\n\n"
