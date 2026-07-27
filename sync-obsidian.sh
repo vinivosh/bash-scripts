@@ -35,7 +35,12 @@ rclone bisync \
     --max-lock 2m -MvP --fix-case \
     "${RCLONE_EXTRA_ARGS[@]}" || exit 1
 
-printf "\nSyncing Obsidian config files...\n"
+
+# Using --force to ensure that the config files are synced even if 100% of them
+# changed since last sync --- bypassing rclone's safety feature that aborts the
+# sync if >50% of the files have changed since last sync. Needed because we're
+# only syncing the three important configs, which almost always change together
+printf "\nSyncing Obsidian config files (with --force)...\n"
 
 rclone bisync \
     "$OBSIDIAN_CONFIG_PATH" \
