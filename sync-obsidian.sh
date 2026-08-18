@@ -10,14 +10,14 @@ if [ -z "$HOSTNAME" ]; then
     exit 1
 fi
 
-if [[ "$HOSTNAME" == "vini-cos" ]]; then
+if [[ "$HOSTNAME" == "vini-pc" || "$HOSTNAME" == "vini-cos" ]]; then
     export OBSIDIAN_VAULT_PATH="/run/media/vini/Slow/Obsidian/"
     export OBSIDIAN_CONFIG_PATH="$HOME/.config/obsidian/"
 elif [[ "$HOSTNAME" == "vini-cos-work" ]]; then
     export OBSIDIAN_VAULT_PATH="$HOME/Documents/Obsidian/"
     export OBSIDIAN_CONFIG_PATH="$HOME/.config/obsidian/"
 else
-    printf "\n\nERROR: Unexpected hostname! Expected 'vini-cos' or 'vini-pc'\n\n"
+    printf "\n\nERROR: Unexpected hostname! Expected 'vini-pc', 'vini-cos' or 'vini-cos-work'\n\n"
     exit 1
 fi
 
