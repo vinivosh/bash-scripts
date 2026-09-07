@@ -13,9 +13,11 @@ fi
 if [[ "$HOSTNAME" == "vini-pc" || "$HOSTNAME" == "vini-cos" ]]; then
     export OBSIDIAN_VAULT_PATH="/run/media/vini/Slow/Obsidian/"
     export OBSIDIAN_CONFIG_PATH="$HOME/.config/obsidian/"
+    export WRITING_FOLDER_PATH="/run/media/vini/Slow/Writing/"
 elif [[ "$HOSTNAME" == "vini-cos-work" ]]; then
     export OBSIDIAN_VAULT_PATH="$HOME/Documents/Obsidian/"
     export OBSIDIAN_CONFIG_PATH="$HOME/.config/obsidian/"
+    export WRITING_FOLDER_PATH="$HOME/Documents/Writing/"
 else
     printf "\n\nERROR: Unexpected hostname! Expected 'vini-pc', 'vini-cos' or 'vini-cos-work'\n\n"
     exit 1
@@ -36,10 +38,9 @@ rclone bisync \
     "${RCLONE_EXTRA_ARGS[@]}" || exit 1
 
 
-# Using --force to ensure that the config files are synced even if 100% of them
-# changed since last sync --- bypassing rclone's safety feature that aborts the
-# sync if >50% of the files have changed since last sync. Needed because we're
-# only syncing the three important configs, which almost always change together
+# Using --force to ensure that the config files are synced even if 100% of them changed since last sync ---
+# bypassing rclone's safety feature that aborts the sync if >50% of the files have changed since last sync.
+# Needed because we're only syncing the three important configs, which almost always change together
 printf "\nSyncing Obsidian config files (with --force)...\n"
 
 rclone bisync \
@@ -52,5 +53,17 @@ rclone bisync \
     "${RCLONE_EXTRA_ARGS[@]}" --force || exit 1
 
 
-printf "\nObsidian vaults synced successfully.\n\n"
+printf "\n\nSyncing 'Writing' folder...\n"
+
+rclone bisync \
+    "$WRITING_FOLDER_PATH" \
+    "crypt-b2-vini:Writing/" \
+    --compare modtime,size --conflict-resolve newer \
+    --exclude "*.bzEmpty" --exclude "*.foldersync.old" \
+    --resilient --recover \
+    --max-lock 2m -MvP --fix-case \
+    "${RCLONE_EXTRA_ARGS[@]}" || exit 1
+
+
+printf "\nAll folders synced successfully.\n\n"
 exit 0
