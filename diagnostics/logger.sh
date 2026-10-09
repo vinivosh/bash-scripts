@@ -8,7 +8,7 @@ set -u
 
 LOG_DIR="$HOME/scripts/diagnostics/logs"
 INTERVAL=5
-RETENTION_DAYS=7
+RETENTION_DAYS=30
 
 mkdir -p "$LOG_DIR"
 
@@ -42,6 +42,16 @@ log_sample() {
                 upower -i "$bat" | grep -E "state|percentage|energy-rate|warning-level"
             fi
         fi
+
+        echo "--- dmesg tail ---"
+        dmesg -T 2>/dev/null | tail -25 || echo "(dmesg unreadable: needs CAP_SYSLOG or kernel.dmesg_restrict=0)"
+
+        echo "--- cpu freq ---"
+        paste -d' ' <(echo "khz:") <(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq | tr '\n' ' ')
+
+        echo "--- mem detail ---"
+        grep -E 'MemAvailable|Committed_AS|Dirty|Writeback|PSI' /proc/meminfo
+        cat /proc/pressure/memory /proc/pressure/cpu /proc/pressure/io 2>/dev/null        
 
         printf "\n\n"
     } >> "$log_file"
